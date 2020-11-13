@@ -5,16 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Walterlv.Demo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="手势算法测试程序" Height="450" Width="800">
     <Grid>
-        <Canvas x:Name="RootPanel" TouchDown="RootPanel_TouchDown" TouchMove="RootPanel_TouchMove">
+        <Canvas x:Name="RootPanel" Background="Transparent">
             <Border x:Name="ReferBorder" Background="ForestGreen" Width="100" Height="100"
                     RenderTransformOrigin="0.5,0.5"
                     IsManipulationEnabled="True"
                     ManipulationStarting="DebugBorder_ManipulationStarting"
                     ManipulationStarted="DebugBorder_ManipulationStarted"
                     ManipulationDelta="DebugBorder_ManipulationDelta"
-                    ManipulationCompleted="ReferBorder_ManipulationCompleted">
+                    ManipulationCompleted="ReferBorder_ManipulationCompleted"
+                    TouchDown="RootPanel_TouchDown"
+                    TouchMove="RootPanel_TouchMove">
                 <Border.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform x:Name="ScaleTransform" />

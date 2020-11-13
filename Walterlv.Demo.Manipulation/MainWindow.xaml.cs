@@ -68,7 +68,7 @@ namespace Walterlv.Demo
 
         private void ReferBorder_ManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
         {
-            _calculator.Complete();
+            _calculator?.Complete();
             _calculator = null;
         }
 
@@ -81,7 +81,34 @@ namespace Walterlv.Demo
 
         private void RootPanel_TouchMove(object sender, TouchEventArgs e)
         {
-            _calculator?.Report(e.TouchDevice.Id, e.GetTouchPoint(RootPanel).Position);
+            if (_calculator is null)
+            {
+                return;
+            }
+
+            var touchPoint = e.GetTouchPoint(RootPanel);
+            var delta = _calculator.Report(e.TouchDevice.Id, touchPoint.Position);
+
+            var scale = delta.Scale;
+            var expansion = delta.Expansion;
+            var rotation = delta.Rotation;
+            var translation = delta.Translation;
+
+            SelfScaleRun.Text = $"{scale.X:0.0000} × {scale.Y:0.0000}";
+            SelfExpansionRun.Text = $"{expansion.X:0.0000} × {expansion.Y:0.0000}";
+            SelfRotationRun.Text = $"{rotation:0.0000}";
+            SelfTranslationRun.Text = $"{translation.X:0.0000} × {translation.Y:0.0000}";
+
+            SelfScaleTransform.ScaleX *= scale.X;
+            SelfScaleTransform.ScaleY *= scale.Y;
+            SelfRotateTransform.Angle += rotation;
+            SelfTranslateTransform.X += translation.X;
+            SelfTranslateTransform.Y += translation.Y;
+
+            SelfAccumulatedScaleRun.Text = $"{SelfScaleTransform.ScaleX:0.0000} × {SelfScaleTransform.ScaleY:0.0000}";
+            SelfAccumulatedExpansionRun.Text = $"未计算";
+            SelfAccumulatedRotationRun.Text = $"{SelfRotateTransform.Angle:0.0000}";
+            SelfAccumulatedTranslationRun.Text = $"{SelfTranslateTransform.X:0.0000} × {SelfTranslateTransform.Y:0.0000}";
         }
     }
 }
