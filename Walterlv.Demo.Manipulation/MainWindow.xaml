@@ -7,13 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Canvas x:Name="RootPanel">
-            <Border x:Name="DebugBorder" Background="ForestGreen" Width="100" Height="100"
-                RenderTransformOrigin="0.5,0.5"
-                IsManipulationEnabled="True"
-                ManipulationStarting="DebugBorder_ManipulationStarting"
-                ManipulationStarted="DebugBorder_ManipulationStarted"
-                ManipulationDelta="DebugBorder_ManipulationDelta">
+        <Canvas x:Name="RootPanel" TouchDown="RootPanel_TouchDown" TouchMove="RootPanel_TouchMove">
+            <Border x:Name="ReferBorder" Background="ForestGreen" Width="100" Height="100"
+                    RenderTransformOrigin="0.5,0.5"
+                    IsManipulationEnabled="True"
+                    ManipulationStarting="DebugBorder_ManipulationStarting"
+                    ManipulationStarted="DebugBorder_ManipulationStarted"
+                    ManipulationDelta="DebugBorder_ManipulationDelta"
+                    ManipulationCompleted="ReferBorder_ManipulationCompleted">
                 <Border.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform x:Name="ScaleTransform" />
@@ -23,8 +24,19 @@
                     </TransformGroup>
                 </Border.RenderTransform>
             </Border>
+            <Border x:Name="SelfBorder" Background="BlueViolet" Width="100" Height="100"
+                    Opacity="0.5" RenderTransformOrigin="0.5,0.5" IsHitTestVisible="False">
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform x:Name="SelfScaleTransform" />
+                        <SkewTransform />
+                        <RotateTransform x:Name="SelfRotateTransform" />
+                        <TranslateTransform x:Name="SelfTranslateTransform" />
+                    </TransformGroup>
+                </Border.RenderTransform>
+            </Border>
         </Canvas>
-        <TextBlock IsHitTestVisible="False">
+        <TextBlock IsHitTestVisible="False" HorizontalAlignment="Left">
             <Run Text="缩放：" />
             <Run x:Name="ScaleRun" />
             <LineBreak />
@@ -38,18 +50,74 @@
             <Run x:Name="TranslationRun" />
             <LineBreak />
         </TextBlock>
+        <TextBlock IsHitTestVisible="False" HorizontalAlignment="Center">
+            <Run Text="单次积累缩放：" />
+            <Run x:Name="CumulativeScaleRun" />
+            <LineBreak />
+            <Run Text="单次积累扩展：" />
+            <Run x:Name="CumulativeExpansionRun" />
+            <LineBreak />
+            <Run Text="单次积累旋转：" />
+            <Run x:Name="CumulativeRotationRun" />
+            <LineBreak />
+            <Run Text="单次积累平移：" />
+            <Run x:Name="CumulativeTranslationRun" />
+            <LineBreak />
+        </TextBlock>
         <TextBlock IsHitTestVisible="False" HorizontalAlignment="Right">
-            <Run Text="积累缩放：" />
+            <Run Text="总积累缩放：" />
             <Run x:Name="AccumulatedScaleRun" />
             <LineBreak />
-            <Run Text="积累扩展：" />
+            <Run Text="总积累扩展：" />
             <Run x:Name="AccumulatedExpansionRun" />
             <LineBreak />
-            <Run Text="积累旋转：" />
+            <Run Text="总积累旋转：" />
             <Run x:Name="AccumulatedRotationRun" />
             <LineBreak />
-            <Run Text="积累平移：" />
+            <Run Text="总积累平移：" />
             <Run x:Name="AccumulatedTranslationRun" />
+            <LineBreak />
+        </TextBlock>
+        <TextBlock IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Run Text="缩放：" />
+            <Run x:Name="SelfScaleRun" />
+            <LineBreak />
+            <Run Text="扩展：" />
+            <Run x:Name="SelfExpansionRun" />
+            <LineBreak />
+            <Run Text="旋转：" />
+            <Run x:Name="SelfRotationRun" />
+            <LineBreak />
+            <Run Text="平移：" />
+            <Run x:Name="SelfTranslationRun" />
+            <LineBreak />
+        </TextBlock>
+        <TextBlock IsHitTestVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <Run Text="单次积累缩放：" />
+            <Run x:Name="SelfCumulativeScaleRun" />
+            <LineBreak />
+            <Run Text="单次积累扩展：" />
+            <Run x:Name="SelfCumulativeExpansionRun" />
+            <LineBreak />
+            <Run Text="单次积累旋转：" />
+            <Run x:Name="SelfCumulativeRotationRun" />
+            <LineBreak />
+            <Run Text="单次积累平移：" />
+            <Run x:Name="SelfCumulativeTranslationRun" />
+            <LineBreak />
+        </TextBlock>
+        <TextBlock IsHitTestVisible="False" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Run Text="总积累缩放：" />
+            <Run x:Name="SelfAccumulatedScaleRun" />
+            <LineBreak />
+            <Run Text="总积累扩展：" />
+            <Run x:Name="SelfAccumulatedExpansionRun" />
+            <LineBreak />
+            <Run Text="总积累旋转：" />
+            <Run x:Name="SelfAccumulatedRotationRun" />
+            <LineBreak />
+            <Run Text="总积累平移：" />
+            <Run x:Name="SelfAccumulatedTranslationRun" />
             <LineBreak />
         </TextBlock>
     </Grid>
