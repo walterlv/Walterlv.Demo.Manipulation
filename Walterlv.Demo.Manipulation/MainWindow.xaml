@@ -1,0 +1,56 @@
+﻿<Window x:Class="Walterlv.Demo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Walterlv.Demo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Canvas x:Name="RootPanel">
+            <Border x:Name="DebugBorder" Background="ForestGreen" Width="100" Height="100"
+                RenderTransformOrigin="0.5,0.5"
+                IsManipulationEnabled="True"
+                ManipulationStarting="DebugBorder_ManipulationStarting"
+                ManipulationStarted="DebugBorder_ManipulationStarted"
+                ManipulationDelta="DebugBorder_ManipulationDelta">
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform x:Name="ScaleTransform" />
+                        <SkewTransform />
+                        <RotateTransform x:Name="RotateTransform" />
+                        <TranslateTransform x:Name="TranslateTransform" />
+                    </TransformGroup>
+                </Border.RenderTransform>
+            </Border>
+        </Canvas>
+        <TextBlock IsHitTestVisible="False">
+            <Run Text="缩放：" />
+            <Run x:Name="ScaleRun" />
+            <LineBreak />
+            <Run Text="扩展：" />
+            <Run x:Name="ExpansionRun" />
+            <LineBreak />
+            <Run Text="旋转：" />
+            <Run x:Name="RotationRun" />
+            <LineBreak />
+            <Run Text="平移：" />
+            <Run x:Name="TranslationRun" />
+            <LineBreak />
+        </TextBlock>
+        <TextBlock IsHitTestVisible="False" HorizontalAlignment="Right">
+            <Run Text="积累缩放：" />
+            <Run x:Name="AccumulatedScaleRun" />
+            <LineBreak />
+            <Run Text="积累扩展：" />
+            <Run x:Name="AccumulatedExpansionRun" />
+            <LineBreak />
+            <Run Text="积累旋转：" />
+            <Run x:Name="AccumulatedRotationRun" />
+            <LineBreak />
+            <Run Text="积累平移：" />
+            <Run x:Name="AccumulatedTranslationRun" />
+            <LineBreak />
+        </TextBlock>
+    </Grid>
+</Window>
