@@ -87,7 +87,7 @@ namespace Walterlv.Demo
             }
 
             var touchPoint = e.GetTouchPoint(RootPanel);
-            var delta = _calculator.Report(e.TouchDevice.Id, touchPoint.Position);
+            var delta = _calculator.Move(e.TouchDevice.Id, touchPoint.Position);
 
             var scale = delta.Scale;
             var expansion = delta.Expansion;
@@ -113,7 +113,22 @@ namespace Walterlv.Demo
 
         private void ReferBorder_TouchUp(object sender, TouchEventArgs e)
         {
+            _calculator?.Up(e.TouchDevice.Id);
+        }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ScaleTransform.ScaleX = 1;
+            ScaleTransform.ScaleY = 1;
+            RotateTransform.Angle = 0;
+            TranslateTransform.X = 0;
+            TranslateTransform.Y = 0;
+
+            SelfScaleTransform.ScaleX = 1;
+            SelfScaleTransform.ScaleY = 1;
+            SelfRotateTransform.Angle = 0;
+            SelfTranslateTransform.X = 0;
+            SelfTranslateTransform.Y = 0;
         }
     }
 }

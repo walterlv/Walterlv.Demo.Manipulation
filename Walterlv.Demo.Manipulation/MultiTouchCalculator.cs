@@ -30,17 +30,16 @@ namespace Walterlv.Demo
         /// <param name="id">触摸点 Id，不同手指对应不同 Id，相同手指对应相同 Id。</param>
         /// <param name="position">触摸点坐标。</param>
         /// <returns>相比于上一次的变换量。</returns>
-        public ManipulationDelta Report(int id, Point position)
+        public ManipulationDelta Move(int id, Point position)
         {
             // 准备状态。
             Vector translation = default;
             double scale = 1.0;
             var existed = _points.ContainsKey(id);
-            var oldPosition = existed ? _points[id] : default;
             _points[id] = position;
             var isMultiTouch = _points.Count > 1;
 
-            // 计算几何中心。
+            // 计算算数中心和算数长度平均值。
             var center = Center(_points.Values.ToList());
             var length = Length(_points.Values.ToList());
             Log($"点集：{string.Join("; ", _points)}");
@@ -55,7 +54,6 @@ namespace Walterlv.Demo
                 if (isMultiTouch)
                 {
                     scale = length / _lastLength;
-                    //scale = OnePointLengthChange(_lastCenter, oldPosition, center, position);
                     Log($" - 缩放：{scale}");
                 }
             }
@@ -73,7 +71,6 @@ namespace Walterlv.Demo
             }
 
             // 返回变换量。
-            //scale = 1;
             return new ManipulationDelta(
                 translation,                // 平移
                 0,                          // 旋转（正时针为正数）
@@ -81,9 +78,25 @@ namespace Walterlv.Demo
                 new Vector(0, 0));          // 扩展量（未使用）
         }
 
-        private double OnePointLengthChange(Point lastCenter, Point oldPosition, Point center, Point position)
+        public void Up(int id)
         {
-            return Math.Sqrt((center - position).Length / (oldPosition - lastCenter).Length);
+            var isMultiTouch = _points.Count > 1;
+            var removed = _points.Remove(id);
+            if (_points.Count == 0)
+            {
+                _lastCenter = default;
+                _lastLength = 1.0;
+            }
+            else if (removed)
+            {
+                var center = Center(_points.Values.ToList());
+                _lastCenter = center;
+                if (isMultiTouch)
+                {
+                    var length = Length(_points.Values.ToList());
+                    _lastLength = length;
+                }
+            }
         }
 
         public void Complete()
@@ -103,45 +116,8 @@ namespace Walterlv.Demo
 
         private static Point GeometryCenter(IReadOnlyList<Point> points)
         {
-            points = points.Concat(new[] { points[0] }).ToList();
-            var n = points.Count;
-
-            // 多边形的面积为：
-            var area = 0.0;
-            for (var i = 0; i < n - 1; i++)
-            {
-                var xi = points[i].X;
-                var yi = points[i].Y;
-                var xi1 = points[i + 1].X;
-                var yi1 = points[i + 1].Y;
-                area += xi * yi1 - xi1 * yi;
-            }
-            area /= 2;
-
-            // 多边形的中心：
-            var centerX = 0.0;
-            for (var i = 0; i < n - 1; i++)
-            {
-                var xi = points[i].X;
-                var yi = points[i].Y;
-                var xi1 = points[i + 1].X;
-                var yi1 = points[i + 1].Y;
-                centerX += (xi + xi1) * (xi * yi1 - xi1 * yi);
-            }
-            centerX /= 6 * area;
-
-            var centerY = 0.0;
-            for (var i = 0; i < n - 1; i++)
-            {
-                var xi = points[i].X;
-                var yi = points[i].Y;
-                var xi1 = points[i + 1].X;
-                var yi1 = points[i + 1].Y;
-                centerY += (yi + yi1) * (xi * yi1 - xi1 * yi);
-            }
-            centerY /= 6 * area;
-
-            return new Point(centerX, centerY);
+            var center = new Point(points.Average(x => x.X), points.Average(x => x.Y));
+            return center;
         }
 
         private static double Length(IReadOnlyList<Point> points) => points is null
@@ -156,21 +132,8 @@ namespace Walterlv.Demo
 
         private static double GeometryLength(IReadOnlyList<Point> points)
         {
-            var n = points.Count;
-
-            // 多边形的面积为：
-            var area = 0.0;
-            for (var i = 0; i < n - 1; i++)
-            {
-                var xi = points[i].X;
-                var yi = points[i].Y;
-                var xi1 = points[i + 1].X;
-                var yi1 = points[i + 1].Y;
-                area += xi * yi1 - xi1 * yi;
-            }
-            area /= 2;
-
-            return Math.Sqrt(Math.Abs(area));
+            var center = new Point(points.Average(x => x.X), points.Average(x => x.Y));
+            return points.Average(x => (x - center).Length);
         }
 
         private static void Log(string message)

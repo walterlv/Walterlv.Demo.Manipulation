@@ -7,9 +7,7 @@
         mc:Ignorable="d"
         Title="手势算法测试程序" Height="450" Width="800">
     <Grid>
-        <Canvas x:Name="RootPanel" Background="Transparent">
-            <Border x:Name="ReferBorder" Background="ForestGreen" Width="100" Height="100"
-                    RenderTransformOrigin="0.5,0.5"
+        <Canvas x:Name="RootPanel" Background="Transparent"
                     IsManipulationEnabled="True"
                     ManipulationStarting="DebugBorder_ManipulationStarting"
                     ManipulationStarted="DebugBorder_ManipulationStarted"
@@ -18,6 +16,8 @@
                     TouchDown="ReferPanel_TouchDown"
                     TouchMove="ReferPanel_TouchMove"
                     TouchUp="ReferBorder_TouchUp">
+            <Border x:Name="ReferBorder" Opacity="0.0" Background="ForestGreen" Width="100" Height="100"
+                    RenderTransformOrigin="0.5,0.5">
                 <Border.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform x:Name="ScaleTransform" />
@@ -123,5 +123,6 @@
             <Run x:Name="SelfAccumulatedTranslationRun" />
             <LineBreak />
         </TextBlock>
+        <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="重置" Click="Button_Click" />
     </Grid>
 </Window>
