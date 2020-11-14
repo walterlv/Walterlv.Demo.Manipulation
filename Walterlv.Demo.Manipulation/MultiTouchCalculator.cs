@@ -36,12 +36,14 @@ namespace Walterlv.Demo
             Vector translation = default;
             double scale = 1.0;
             var existed = _points.ContainsKey(id);
+            var oldPosition = existed ? _points[id] : default;
             _points[id] = position;
             var isMultiTouch = _points.Count > 1;
 
             // 计算几何中心。
             var center = Center(_points.Values.ToList());
             var length = Length(_points.Values.ToList());
+            Log($"点集：{string.Join("; ", _points)}");
             Log($"【{_points.Count}点】 几何中心：{center}  几何长度：{length}");
 
             // 计算变换量。
@@ -53,6 +55,7 @@ namespace Walterlv.Demo
                 if (isMultiTouch)
                 {
                     scale = length / _lastLength;
+                    //scale = OnePointLengthChange(_lastCenter, oldPosition, center, position);
                     Log($" - 缩放：{scale}");
                 }
             }
@@ -78,6 +81,11 @@ namespace Walterlv.Demo
                 new Vector(0, 0));          // 扩展量（未使用）
         }
 
+        private double OnePointLengthChange(Point lastCenter, Point oldPosition, Point center, Point position)
+        {
+            return Math.Sqrt((center - position).Length / (oldPosition - lastCenter).Length);
+        }
+
         public void Complete()
         {
             _points.Clear();
@@ -95,6 +103,7 @@ namespace Walterlv.Demo
 
         private static Point GeometryCenter(IReadOnlyList<Point> points)
         {
+            points = points.Concat(new[] { points[0] }).ToList();
             var n = points.Count;
 
             // 多边形的面积为：
@@ -166,7 +175,7 @@ namespace Walterlv.Demo
 
         private static void Log(string message)
         {
-            Debug.WriteLine(message);
+            //Debug.WriteLine(message);
         }
     }
 }
