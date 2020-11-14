@@ -15,8 +15,9 @@
                     ManipulationStarted="DebugBorder_ManipulationStarted"
                     ManipulationDelta="DebugBorder_ManipulationDelta"
                     ManipulationCompleted="ReferBorder_ManipulationCompleted"
-                    TouchDown="RootPanel_TouchDown"
-                    TouchMove="RootPanel_TouchMove">
+                    TouchDown="ReferPanel_TouchDown"
+                    TouchMove="ReferPanel_TouchMove"
+                    TouchUp="ReferBorder_TouchUp">
                 <Border.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform x:Name="ScaleTransform" />

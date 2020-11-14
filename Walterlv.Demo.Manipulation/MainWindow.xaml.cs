@@ -25,6 +25,7 @@ namespace Walterlv.Demo
         private void DebugBorder_ManipulationStarting(object sender, ManipulationStartingEventArgs e)
         {
             _calculator = new MultiTouchCalculator();
+            _calculator?.Start();
             e.ManipulationContainer = RootPanel;
         }
 
@@ -74,12 +75,11 @@ namespace Walterlv.Demo
 
         private MultiTouchCalculator? _calculator;
 
-        private void RootPanel_TouchDown(object sender, TouchEventArgs e)
+        private void ReferPanel_TouchDown(object sender, TouchEventArgs e)
         {
-            _calculator?.Start();
         }
 
-        private void RootPanel_TouchMove(object sender, TouchEventArgs e)
+        private void ReferPanel_TouchMove(object sender, TouchEventArgs e)
         {
             if (_calculator is null)
             {
@@ -109,6 +109,11 @@ namespace Walterlv.Demo
             SelfAccumulatedExpansionRun.Text = $"未计算";
             SelfAccumulatedRotationRun.Text = $"{SelfRotateTransform.Angle:0.0000}";
             SelfAccumulatedTranslationRun.Text = $"{SelfTranslateTransform.X:0.0000} × {SelfTranslateTransform.Y:0.0000}";
+        }
+
+        private void ReferBorder_TouchUp(object sender, TouchEventArgs e)
+        {
+
         }
     }
 }
